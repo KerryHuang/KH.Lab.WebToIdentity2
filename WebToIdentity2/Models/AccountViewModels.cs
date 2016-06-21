@@ -79,6 +79,23 @@ namespace WebToIdentity2.Models
         [Display(Name = "確認密碼")]
         [Compare("Password", ErrorMessage = "密碼和確認密碼不相符。")]
         public string ConfirmPassword { get; set; }
+
+        // TODO Step2 Code insert here
+
+        /// <summary>
+        /// 新增 生日 欄位
+        /// </summary>
+        [Required]
+        [Display(Name = "生日")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy/MM/dd}")]
+        public System.DateTime? Birthday { get; set; }
+
+        /// <summary>
+        /// 新增 暱稱 欄位
+        /// </summary>
+        [Display(Name = "暱稱")]
+        [StringLength(20, ErrorMessage = "{0} 的長度至少必須為 {2} 個字元。", MinimumLength = 2)]
+        public string NickName { get; set; }
     }
 
     public class ResetPasswordViewModel

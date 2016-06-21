@@ -16,6 +16,17 @@ namespace WebToIdentity2.Models
             // 在這裡新增自訂使用者宣告
             return userIdentity;
         }
+
+        // TODO Step1 Code insert here
+
+        /// <summary>
+        /// 新增 生日 欄位
+        /// </summary>
+        public System.DateTime? BirthDay { get; set; }
+        /// <summary>
+        /// 新增 暱稱 欄位
+        /// </summary>
+        public string NickName { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
