@@ -29,12 +29,20 @@ namespace WebToIdentity2.Models
         public string NickName { get; set; }
 
 
-        // TODO Step4 Code insert here
+        // TODO Step5 Code insert here
 
         /// <summary>
         /// 新增 手機 欄位
         /// </summary>
         public string Mobile { get; set; }
+
+        // TODO Step9 Code insert here
+
+        // Code First Migrations 異動更新資料庫
+        // 1 開啟套件管理器主控台
+        // 2 輸入「Enable-Migrations」
+        // 3 再輸入「Add-Migration Init」
+        // 4 最後使用「Update-Database」完成資料庫合併
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

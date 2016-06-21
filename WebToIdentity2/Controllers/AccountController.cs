@@ -10,6 +10,10 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using WebToIdentity2.Models;
 
+// TODO Step14 Code insert here
+
+using Microsoft.AspNet.Identity.EntityFramework;
+
 namespace WebToIdentity2.Controllers
 {
     [Authorize]
@@ -18,11 +22,16 @@ namespace WebToIdentity2.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
+        // TODO Step12 Code insert here
+
+        // 新增 群組
+        private ApplicationRoleManager _roleManager;
+
         public AccountController()
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -34,9 +43,9 @@ namespace WebToIdentity2.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -49,6 +58,23 @@ namespace WebToIdentity2.Controllers
             private set
             {
                 _userManager = value;
+            }
+        }
+
+        // TODO Step13 Code insert here
+
+        /// <summary>
+        /// 新增 群組
+        /// </summary>
+        public ApplicationRoleManager RoleManager
+        {
+            get
+            {
+                return _roleManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationRoleManager>();
+            }
+            private set
+            {
+                _roleManager = value;
             }
         }
 
@@ -120,7 +146,7 @@ namespace WebToIdentity2.Controllers
             // 如果使用者輸入不正確的代碼來表示一段指定的時間，則使用者帳戶 
             // 會有一段指定的時間遭到鎖定。 
             // 您可以在 IdentityConfig 中設定帳戶鎖定設定
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -139,6 +165,21 @@ namespace WebToIdentity2.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+            // TODO Step15 Code insert here
+
+            // 查詢Role
+            var role = RoleManager.FindByName("Contact");
+            if (role == null)
+            {
+                // 新增Role
+                role = new IdentityRole() { Name = "Contact" };
+                var result = RoleManager.Create(role);
+                if (!result.Succeeded)
+                {
+                    AddErrors(result);
+                }
+            }
+
             return View();
         }
 
@@ -151,17 +192,47 @@ namespace WebToIdentity2.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+
+                    // TODO Step3 Code insert here
+
+                    // 資料綁定
+                    BirthDay = model.BirthDay,
+                    NickName = model.NickName,
+
+                    // TODO Step7 Code insert here
+
+                    Mobile = model.Mobile
+                };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
                     // 如需如何啟用帳戶確認和密碼重設的詳細資訊，請造訪 http://go.microsoft.com/fwlink/?LinkID=320771
                     // 傳送包含此連結的電子郵件
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "確認您的帳戶", "請按一下此連結確認您的帳戶 <a href=\"" + callbackUrl + "\">這裏</a>");
+
+                    // TODO Step16 Code insert here
+
+                    // 查詢User的所有Role
+                    var userroles = UserManager.GetRoles(user.Id).ToList();
+                    if (!userroles.Contains("Contact"))
+                    {
+                        // 新增UserInRole
+                        result = UserManager.AddToRole(user.Id, "Contact");
+                        if (!result.Succeeded)
+                        {
+                            AddErrors(result);
+                            // 如果執行到這裡，發生某項失敗，則重新顯示表單
+                            return View(model);
+                        }
+                    }
 
                     return RedirectToAction("Index", "Home");
                 }

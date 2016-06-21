@@ -24,7 +24,13 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("首頁", "Index", "Home")</li>
                     <li>@Html.ActionLink("關於", "About", "Home")</li>
-                    <li>@Html.ActionLink("連絡方式", "Contact", "Home")</li>
+
+                    @*// TODO Step18 Code insert here*@
+
+                    @if (User.IsInRole("Contact"))
+                    {
+                        <li>@Html.ActionLink("連絡方式", "Contact", "Home")</li>
+                    }  
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

@@ -88,7 +88,7 @@ namespace WebToIdentity2.Models
         [Required]
         [Display(Name = "生日")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy/MM/dd}")]
-        public System.DateTime? Birthday { get; set; }
+        public System.DateTime? BirthDay { get; set; }
 
         /// <summary>
         /// 新增 暱稱 欄位
@@ -97,7 +97,7 @@ namespace WebToIdentity2.Models
         [StringLength(20, ErrorMessage = "{0} 的長度至少必須為 {2} 個字元。", MinimumLength = 2)]
         public string NickName { get; set; }
 
-        // TODO Step5 Code insert here
+        // TODO Step6 Code insert here
 
         /// <summary>
         /// 新增 手機 欄位

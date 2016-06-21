@@ -20,6 +20,9 @@ namespace WebToIdentity2.Controllers
             return View();
         }
 
+        // TODO Step17 Code insert here
+
+        [Authorize(Roles = "Contact")]
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
