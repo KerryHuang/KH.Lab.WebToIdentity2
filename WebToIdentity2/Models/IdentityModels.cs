@@ -27,6 +27,14 @@ namespace WebToIdentity2.Models
         /// 新增 暱稱 欄位
         /// </summary>
         public string NickName { get; set; }
+
+
+        // TODO Step4 Code insert here
+
+        /// <summary>
+        /// 新增 手機 欄位
+        /// </summary>
+        public string Mobile { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

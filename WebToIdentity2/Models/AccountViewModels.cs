@@ -96,6 +96,15 @@ namespace WebToIdentity2.Models
         [Display(Name = "暱稱")]
         [StringLength(20, ErrorMessage = "{0} 的長度至少必須為 {2} 個字元。", MinimumLength = 2)]
         public string NickName { get; set; }
+
+        // TODO Step5 Code insert here
+
+        /// <summary>
+        /// 新增 手機 欄位
+        /// </summary>
+        [Display(Name = "手機")]
+        [StringLength(10, ErrorMessage = "{0} 的長度至少必須為 {2} 個字元。", MinimumLength = 10)]
+        public string Mobile { get; set; }
     }
 
     public class ResetPasswordViewModel
